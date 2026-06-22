@@ -231,13 +231,13 @@ function Login() {
             <Trans>Server</Trans>
           </p>
           <input
-            value={instanceText}
+            value={DEFAULT_INSTANCE || instanceText}
             required
             type="text"
             class="large"
             id="instanceURL"
             ref={instanceURLRef}
-            disabled={uiState === 'loading'}
+            disabled={uiState === 'loading' || !!DEFAULT_INSTANCE}
             // list="instances-list"
             autocorrect="off"
             autocapitalize="off"
@@ -246,11 +246,11 @@ function Login() {
             placeholder={t`server domain`}
             enterKeyHint="go"
             onInput={(e) => {
-              setInstanceText(e.target.value);
+              if (!DEFAULT_INSTANCE) setInstanceText(e.target.value);
             }}
             dir="auto"
           />
-          {instancesSuggestions?.length > 0 ? (
+          {!DEFAULT_INSTANCE && instancesSuggestions?.length > 0 ? (
             <ul id="instances-suggestions">
               {instancesSuggestions.map((instance, i) => (
                 <li>
@@ -266,11 +266,11 @@ function Login() {
                 </li>
               ))}
             </ul>
-          ) : (
+          ) : !DEFAULT_INSTANCE ? (
             <div id="instances-eg">
               <Trans>e.g. &ldquo;mastodon.social&rdquo;</Trans>
             </div>
-          )}
+          ) : null}
           {/* <datalist id="instances-list">
             {instancesList.map((instance) => (
               <option value={instance} />
